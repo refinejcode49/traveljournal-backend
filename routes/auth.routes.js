@@ -1,6 +1,8 @@
 const UserModel = require("../models/User.model");
 const router = require("express").Router();
 const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { isAuthenticated } = require("../middlewares/jwt.middlewares");
 
 //to create a user
 router.post("/signup", async (req, res) => {
@@ -42,15 +44,23 @@ router.post("/login", async (req, res) => {
         res.status(400).json({ errorMessage: "Invalid credentials" });
       } else {
         // the email exists and the passwords match
-        res.status(200).json({ message: "you logged in !" });
+        const data = { _id: foundUser._id, username: foundUser.username };
+        const authToken = jwt.sign(data, process.env.TOKEN_SECRET, {
+          algorithm: "HS256",
+          expiresIn: "15d",
+        });
+        res.status(200).json({ message: "you logged in !", authToken });
       }
     }
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
   }
-
-  //32:09 du 08/04/2025
 });
 
+// to verify if the token is present and valid
+router.get("/verify", isAuthenticated, async (req, res) => {
+  console.log("here in the verify route");
+  res.status(200).json({ message: "Token valid", payload: req.payload });
+});
 module.exports = router;
