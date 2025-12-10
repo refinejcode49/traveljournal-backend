@@ -63,4 +63,5 @@ router.get("/verify", isAuthenticated, async (req, res) => {
   console.log("here in the verify route");
   res.status(200).json({ message: "Token valid", payload: req.payload });
 });
+
 module.exports = router;
