@@ -24,6 +24,9 @@ app.use("/auth", authRoutes);
 const tripRoutes = require("./routes/trip.routes");
 app.use("/trip", tripRoutes);
 
+const stopRoutes = require("./routes/stop.routes");
+app.use("/stop", stopRoutes);
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 
