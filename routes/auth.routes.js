@@ -30,7 +30,7 @@ router.post("/login", async (req, res) => {
   try {
     const foundUser = await UserModel.findOne({ email: req.body.email });
     if (!foundUser) {
-      res.status(400).json({ errorMessage: "Invalid credentials" });
+      res.status(400).json({ errorMessage: "Identifiants invalides" });
     } else {
       // if user found we compare the password
       const passwordFromFrontend = req.body.password;
@@ -41,7 +41,7 @@ router.post("/login", async (req, res) => {
       );
       //console.log("passwords match ?", passwordsMatch);
       if (!passwordsMatch) {
-        res.status(400).json({ errorMessage: "Invalid credentials" });
+        res.status(400).json({ errorMessage: "Identifiants invalides" });
       } else {
         // the email exists and the passwords match
         const data = { _id: foundUser._id, username: foundUser.username };
